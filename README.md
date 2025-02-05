@@ -35,3 +35,9 @@ How do we scale this?
 If this really is just generically more accurate than direct prediction, we certainly want to train everything like this, but now quadratic increase of training data is a burden… how to overcome this? partial augmentation?
 
 
+    RBFE informed 'cycle construction' - programs like LOMAP and HIMAP can create a pathway of small perturbations through a list of species, the idea being that small perturbations are likely to be more accurate in their prediction of the RBFE, giving a more accurate overall prediction. Difficulty here is that we know the exact errors for all of the training deltas but struggle to incorporate those numbers during inference time.
+    Bayesian Optimization - could select susbsequent anchors to minimize variance
+
+Both of these probably lose out to some simple weighting scheme
+
+can we make the triangle inequality, symmetry, cycle etc. be enforeced in delta learning. check what deepdelta dud - also check if we actually need to enforce it? is it just leraning it on its own? i imagine if we put in the self pairs at least that one will be satisfied
