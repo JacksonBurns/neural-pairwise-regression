@@ -1,0 +1,71 @@
+from collections.abc import Sequence
+from collections import namedtuple
+from typing import Literal
+from itertools import combinations, combinations_with_replacement, product, chain
+from random import Random
+
+import torch
+
+class PairwiseAugmentedDataset(torch.utils.data.Dataset):
+    def __init__(self, X: torch.Tensor, y: torch.Tensor, *, how: Literal['full','ut','sut'] = 'full'):
+        super().__init__()
+        self.X = X
+        self.y = y
+        match how:
+            case 'full':
+                self.idxs = list(product(range(X.shape[0]), repeat=2))
+            case 'ut':
+                self.idxs = list(combinations_with_replacement(range(X.shape[0]), 2))
+            case 'sut':
+                self.idxs = list(combinations(range(X.shape[0]), 2))
+            case _:
+                raise TypeError(f"Invalid configuration {how=}.")
+    
+    def __len__(self):
+        return len(self.idxs)
+
+    def __getitem__(self, index):
+        i, j = self.idxs[index]
+        return self.X[i], self.X[j], self.y[i] - self.y[j]
+
+class PairwiseAnchoredDataset(torch.utils.data.Dataset):
+    def __init__(self, X_anchors: torch.Tensor, y_anchors: torch.Tensor, X: torch.Tensor, y: torch.Tensor, *, how: Literal['full','half'] = 'full'):
+        super().__init__()
+        self.Xs = (X_anchors, X)
+        self.ys = (y_anchors, y)
+        Pair = namedtuple('Pair', ['src_1', 'idx_1', 'src_2', 'idx_2'])
+        pairs = []
+        for i in range(X_anchors.shape[0]):
+            for j in range(X.shape[0]):
+                pairs.append(Pair(0, i, 1, j))
+                if how == 'full':
+                    pairs.append(Pair(1, j, 0, i))
+        self.pairs = pairs
+    
+    def __len__(self):
+        return len(self.pairs)
+
+    def __getitem__(self, index):
+        src_1, idx_1, src_2, idx_2 = self.pairs[index]
+        return self.Xs[src_1][idx_1], self.Xs[src_2][idx_2], self.ys[src_1][idx_1] - self.ys[src_2][idx_2]
+
+class PairwiseInferenceDataset(torch.utils.data.Dataset):
+    def __init__(self, X_anchors: torch.Tensor, y_anchors: torch.Tensor, X: torch.Tensor, *, how: Literal['full','half'] = 'full'):
+        super().__init__()
+        self.Xs = (X_anchors, X)
+        self.y_anchors = y_anchors
+        Pair = namedtuple('Pair', ['src_1', 'idx_1', 'src_2', 'idx_2'])
+        pairs = []
+        for i in range(X_anchors.shape[0]):
+            for j in range(X.shape[0]):
+                pairs.append(Pair(0, i, 1, j))
+                if how == 'full':
+                    pairs.append(Pair(1, j, 0, i))
+        self.pairs = pairs
+    
+    def __len__(self):
+        return len(self.pairs)
+
+    def __getitem__(self, index):
+        src_1, idx_1, src_2, idx_2 = self.pairs[index]
+        return self.Xs[src_1][idx_1], self.Xs[src_2][idx_2], self.y_anchors[idx_1 if src_1 == 0 else idx_2]

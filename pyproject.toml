@@ -1,0 +1,63 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nepare"
+description = "Neural Pairwise Regression"
+version = "0.0.0a0"
+authors = [
+    {name = "Jackson Burns", email="jwburns@mit.edu"}
+]
+readme = "README.md"
+license = {text = "MIT"}
+classifiers = [
+	"Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent"
+]
+keywords = [
+    "machine learning",
+]
+requires-python = ">=3.10"
+dependencies = [
+    "torch >= 2",
+    "lightning >= 2.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black == 23.*",
+    "autopep8",
+    "flake8",
+    "pytest",
+    "isort",
+]
+notebooks = [
+    "ipykernel",
+    "plotly",
+    "nbformat>=4.2.0",
+]
+
+[project.urls]
+source = "https://github.com/jacksonburns/neural-pairwise-regression"
+PyPi = "https://pypi.org/project/nepare/"
+
+[tool.setuptools]
+packages = ["nepare"]
+
+[tool.black]
+line-length = 55
+target-version = ["py310"]
+required-version = "23"
+
+[tool.autopep8]
+in_place = true
+recursive = true
+aggressive = 2
+max_line_length = 55
+
+[tool.isort]
+profile = "black"
+line_length = 55
+force_sort_within_sections = true
