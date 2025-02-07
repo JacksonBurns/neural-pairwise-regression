@@ -1,4 +1,4 @@
-# Pairwise Difference Networks
+# Neural Pairwise Regression
 Recasting the archetypal neural network regression problem $y=f(x;\theta)$ to $y_1-y_2=f(x_1,x_2;\theta)$ for improved extrapolation, well-calibrated uncertainty estimates, and effectiveness in low-data regimes.
 
 ## Background
