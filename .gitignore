@@ -1,5 +1,5 @@
 # meta
-meta/presentation/tex2pdf*
+meta/*/tex2pdf*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
