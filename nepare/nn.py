@@ -1,4 +1,4 @@
-from typing import OrderedDict, Sequence
+from typing import OrderedDict
 
 import torch
 import lightning
@@ -12,6 +12,7 @@ class FeedforwardNeuralNetwork(lightning.LightningModule):
             _modules[f"{activation.__name__.lower()}_{i}"] = activation()
         _modules["readout"] = torch.nn.Linear(hidden_size, 1)
         self.fnn = torch.nn.Sequential(_modules)
+        self.save_hyperparameters()
 
     def configure_optimizers(self):
         return torch.optim.AdamW(self.parameters(), lr=1e-3)
@@ -32,8 +33,11 @@ class FeedforwardNeuralNetwork(lightning.LightningModule):
     def validation_step(self, batch: tuple[torch.Tensor, torch.Tensor], batch_idx):
         return self._step(batch, "validation")
 
-    def testing_step(self, batch: tuple[torch.Tensor, torch.Tensor], batch_idx):
+    def test_step(self, batch: tuple[torch.Tensor, torch.Tensor], batch_idx):
         return self._step(batch, "testing")
+
+    def predict_step(self, X: torch.Tensor):
+        return self(X[0])
 
 class NeuralPairwiseRegressor(FeedforwardNeuralNetwork):
     def __init__(self, input_size, hidden_size, num_layers, activation = torch.nn.ReLU):
@@ -41,5 +45,10 @@ class NeuralPairwiseRegressor(FeedforwardNeuralNetwork):
 
     def _step(self, batch: tuple[torch.Tensor, torch.Tensor, torch.Tensor], name: str):
         x_1, x_2, y = batch
-        x = torch.cat(x_1, x_2, dim=1)
+        x = torch.cat((x_1, x_2), dim=1)
         return super()._step((x, y), name)
+
+    def predict_step(self, batch: tuple[torch.Tensor, torch.Tensor, torch.Tensor]):
+        x_1, x_2, _ = batch
+        x = torch.cat((x_1, x_2), dim=1)
+        return self(x)

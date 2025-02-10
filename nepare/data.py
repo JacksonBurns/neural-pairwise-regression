@@ -46,8 +46,8 @@ class PairwiseAnchoredDataset(torch.utils.data.Dataset):
         return len(self.pairs)
 
     def __getitem__(self, index):
-        src_1, idx_1, src_2, idx_2 = self.pairs[index]
-        return self.Xs[src_1][idx_1], self.Xs[src_2][idx_2], self.ys[src_1][idx_1] - self.ys[src_2][idx_2]
+        p = self.pairs[index]
+        return self.Xs[p.src_1][p.idx_1], self.Xs[p.src_2][p.idx_2], self.ys[p.src_1][p.idx_1] - self.ys[p.src_2][p.idx_2]
 
 class PairwiseInferenceDataset(torch.utils.data.Dataset):
     def __init__(self, X_anchors: torch.Tensor, y_anchors: torch.Tensor, X: torch.Tensor, *, how: Literal['full','half'] = 'full'):
