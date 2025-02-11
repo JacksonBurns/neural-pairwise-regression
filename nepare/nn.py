@@ -52,3 +52,8 @@ class NeuralPairwiseRegressor(FeedforwardNeuralNetwork):
         x_1, x_2, _ = batch
         x = torch.cat((x_1, x_2), dim=1)
         return self(x)
+
+class LearnedEmbeddingNeuralPairwiseRegressor(NeuralPairwiseRegressor):
+    def __init__(self, input_size, hidden_size, num_layers, embedding_module, activation=torch.nn.ReLU):
+        super().__init__(input_size, hidden_size, num_layers, activation)
+        raise NotImplementedError("TODO: implement a class which learns a representation during training using an arbitrary module")

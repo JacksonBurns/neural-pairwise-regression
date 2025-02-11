@@ -33,7 +33,7 @@ note: |
     - solubility as a function of a molecular embedding instead of experiment
     - band gap as a function of formula instead of expensive simulation
  - When target $y$ is continuous this is a regression problem $y=f(x; \theta)$
-    - $x$ is some static or learned _embedding_
+    - $x$ is some static or learned _embedding_ i.e. a vector of scalars
     - $f(...; \theta)$ is an arbitrary model with parameters
 
 ## Regression Methods
@@ -333,51 +333,51 @@ Running inference with this approach is an open research area:
     - train and infer with one direction [@tynes_padre]
     - check self loop consistency after-the-fact [@deepdelta]
 
-## Encoder
-
-Up to this point I have been quietly assuming that some function like this exists:
-
-\begin{center}
-\begin{tikzpicture}[
-    node distance=1.5cm and 1.5cm,
-    every node/.style={draw, minimum width=2cm, minimum height=1cm, align=center}
-  ]
-
-  % Input box
-  \node (Input) at (0,0) {Input};
-  
-  % Encoder box
-  \node (Encoder) at (3,0) {Encoder};
-  
-  % Encoder output nodes
-  \node[draw, circle, minimum size=0.7cm] (E1) at (6,1) {E1};
-  \node[draw, circle, minimum size=0.7cm] (E2) at (6,0) {E2};
-  \node[draw, circle, minimum size=0.7cm] (E3) at (6,-1) {E$_{n}$};
-  
-  % Arrows
-  \draw[->] (Input) -- (Encoder);
-  \draw[->] (Encoder) -- (E1);
-  \draw[->] (Encoder) -- (E2);
-  \draw[->] (Encoder) -- (E3);
-
-\end{tikzpicture}
-\end{center}
-
-We may want to _learn_ this embedding rather than keep it static
-
- - Fully differentiable architecture, can readily plug in modules like ChemProp's message passing
- - DeepDelta has done an incorrect version of this in which they had two separate MP blocks [@deepdelta]
-
 # Initial Investigation
 
-## Implementation
+## Implementing `nepare`
+
+The `nepare` package obfuscates the implementation details of the decisions previously discussed:
 
 ```python
-from py2opsin import py2opsin
+npr = NeuralPairwiseRegressor(
+  input_size=2,
+  hidden_size=50,
+  num_layers=3,
+)
+```
 
-smiles_string = py2opsin(
-  chemical_name = "ethane",
-  output_format = "SMILES",
+`NeuralPairwiseRegressor` is a subclass of a `FeedforwardNeuralNetwork` which is useful for comparison.
+
+## Ease of Augmentation
+
+Augmenting training can easily be configured:
+
+```python
+training_dataset = PairwiseAugmentedDataset(
+  X[train_idxs],
+  y[train_idxs],
+  how='full',  # one of: 'full', 'ut', 'sut'
+)
+```
+
+## Automatic Anchoring
+
+Validation and inference anchoring are also handled behind the scenes:
+
+```python
+validation_dataset = PairwiseAnchoredDataset(
+  X[train_idxs],
+  y[train_idxs],
+  X[val_idxs],
+  y[val_idxs],
+  how='full',  # one of: 'full', 'half'
+)
+predict_dataset = PairwiseInferenceDataset(
+  X[train_idxs],
+  y[train_idxs],
+  X_unknown,
+  how='full',  # one of: 'full', 'half'
 )
 ```
 
@@ -399,7 +399,102 @@ Here we use `mordred(-community)` as the encoder.
 
 ## Learned Embeddings
 
-Show a diagram where the encoder outputs both representations
+Up to this point I have been quietly assuming that some function like this exists:
+
+\begin{center}
+\begin{tikzpicture}[
+    node distance=1.5cm and 1.5cm,
+    every node/.style={draw, minimum width=2cm, minimum height=1cm, align=center}
+  ]
+
+  % Input box
+  \node (Input) at (0,0) {Input};
+  
+  % Encoder node
+  \node[draw, circle, minimum size=0.7cm] (Encoder) at (3,0) {Encoder};
+  
+  % Encoder output nodes
+  \node[draw, circle, minimum size=0.7cm] (E1) at (6,1) {E1};
+  \node[draw, circle, minimum size=0.7cm] (E2) at (6,0) {E2};
+  \node[draw, circle, minimum size=0.7cm] (E3) at (6,-1) {E$_{n}$};
+  
+  % Arrows
+  \draw[->] (Input) -- (Encoder);
+  \draw[->] (Encoder) -- (E1);
+  \draw[->] (Encoder) -- (E2);
+  \draw[->] (Encoder) -- (E3);
+
+\end{tikzpicture}
+\end{center}
+
+We may want to _learn_ this embedding rather than keep it static
+
+ - Fully differentiable architecture, can readily plug in modules like ChemProp's message passing
+ - DeepDelta has done an incorrect version of this in which they had two separate MP blocks [@deepdelta]
+
+## LearnedEmbeddingNPR
+
+```python
+class LearnedEmbeddingNPR(NeuralPairwiseRegressor)
+    def __init__(self, ..., embedding_module)
+```
+
+\begin{center}
+\begin{tikzpicture}[
+    node distance=1cm and 1cm,
+    every node/.style={draw, circle, minimum size=0.7cm, inner sep=0pt}
+  ]
+
+  % Input boxes
+  \node[draw, rectangle, minimum width=2cm, minimum height=1cm, align=center] (Input1) at (0,1) {Input 1};
+  \node[draw, rectangle, minimum width=2cm, minimum height=1cm, align=center] (Input2) at (0,-1) {Input 2};
+  
+  % Encoder box
+  \node[draw, circle, minimum size=0.7cm] (Encoder) at (2,0) {Encoder};
+  
+  % Encoder output nodes
+  \node (E11) at (4,1.5) {E$_{1,1}$};
+  \node (E12) at (4,0.5) {E$_{1,n}$};
+  \node (E21) at (4,-0.5) {E$_{2,1}$};
+  \node (E22) at (4,-1.5) {E$_{2,n}$};
+  
+  % Arrows
+  \draw[->] (Input1) -- (Encoder);
+  \draw[->] (Input2) -- (Encoder);
+  \draw[->] (Encoder) -- (E11);
+  \draw[->] (Encoder) -- (E12);
+  \draw[->] (Encoder) -- (E21);
+  \draw[->] (Encoder) -- (E22);
+
+  \foreach \i in {1,2} {
+    \node (H1\i) at (6,2-\i) {H$_{d,\i}$};
+  }
+  \node (H13) at (6,-1) {H$_{d,h}$};
+
+  % Output layer
+  \node (O) at (8,0) {O};
+
+  % Connections
+  \foreach \i in {1,2} {
+    \foreach \j in {1,2,3} {
+      \draw[->] (E1\i) -- (H1\j);
+      \draw[->] (E2\i) -- (H1\j);
+    }
+  }
+  \foreach \i in {1,2,3} {
+    \draw[->] (H1\i) -- (O);
+  }
+
+\end{tikzpicture}
+\end{center}
+
+## Uncertainty Calibration
+
+I want to provide an in-depth analysis of how well calibrated the model is - need help getting started.
+
+We have some previous work in this group that I am aware of.
+
+I would especially like to know of any existing __frameworks__ for doing this so I can avoid re-implementing a bunch of metrics/methods/etc. from scratch.
 
 # Supplementary Material
 
@@ -415,4 +510,8 @@ confrank: https://github.com/grimme-lab/confrank
 AdaPRL: train a normal NN but penalize pairwise distances in loss function (https://arxiv.org/abs/2501.05809)
  -->
 
-## Cited Works {.allowframebreaks}
+## Cited Works
+
+<!-- need below to make all the citations fit on the slide -->
+
+\tiny
