@@ -27,6 +27,10 @@ class PairwiseAugmentedDataset(torch.utils.data.Dataset):
     def __getitem__(self, index):
         i, j = self.idxs[index]
         return self.X[i], self.X[j], self.y[i] - self.y[j]
+    
+    def downsample_(self, n:int, random_seed:int=1701):
+        rng = Random(random_seed)
+        self.idxs = rng.sample(self.idxs, k=n)
 
 class PairwiseAnchoredDataset(torch.utils.data.Dataset):
     def __init__(self, X_anchors: torch.Tensor, y_anchors: torch.Tensor, X: torch.Tensor, y: torch.Tensor, *, how: Literal['full','half'] = 'full'):

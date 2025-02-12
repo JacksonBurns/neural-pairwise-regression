@@ -15,7 +15,7 @@ class FeedforwardNeuralNetwork(lightning.LightningModule):
         self.save_hyperparameters()
 
     def configure_optimizers(self):
-        return torch.optim.AdamW(self.parameters(), lr=1e-3)
+        return torch.optim.AdamW(self.parameters(), lr=1e-4)
 
     def forward(self, x: torch.Tensor):
         return self.fnn(x)
