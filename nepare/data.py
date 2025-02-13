@@ -13,11 +13,11 @@ class PairwiseAugmentedDataset(torch.utils.data.Dataset):
         self.y = y
         match how:
             case 'full':
-                self.idxs = list(product(range(X.shape[0]), repeat=2))
+                self.idxs = list(product(range(len(X)), repeat=2))
             case 'ut':
-                self.idxs = list(combinations_with_replacement(range(X.shape[0]), 2))
+                self.idxs = list(combinations_with_replacement(range(len(X)), 2))
             case 'sut':
-                self.idxs = list(combinations(range(X.shape[0]), 2))
+                self.idxs = list(combinations(range(len(X)), 2))
             case _:
                 raise TypeError(f"Invalid configuration {how=}.")
     
