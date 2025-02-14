@@ -385,15 +385,13 @@ predict_dataset = PairwiseInferenceDataset(
 
 _demo notebook_
 
-## Aqueous Solubility Prediction
+## Real Molecular Properties
 
-Here we use `mordred(-community)` as the encoder.
+Small molecule Rat Plasma Protein Binding via `polaris`
 
-<!-- | Customer / Source | Arnhem [euro/ton] |  Gouda [euro/ton] | Demand [tons] |
-| :---: | :--: | :--: | :--: |
-| London | n/a | 2.5 | 125 |
-| The Hague | 1.4 | 0.8 | 200 |
-| **Supply [tons]** | 550 tons | 700 tons | n/a | -->
+ - only 110 training samples but high-quality
+
+![`nepare` reaches #3 on the leaderboard, narrowly losing to a _billion_ parameter foundation model.](./figures/polaris_rppb_nepare_leaderboard.png){width=3.5in}
 
 # Subsequent Steps
 
@@ -495,6 +493,16 @@ I want to provide an in-depth analysis of how well calibrated the model is - nee
 We have some previous work in this group that I am aware of.
 
 I would especially like to know of any existing __frameworks__ for doing this so I can avoid re-implementing a bunch of metrics/methods/etc. from scratch.
+
+# Acknowledgements
+
+## Thank you!
+
+Thanks to all members of the Green Group!
+
+_latest group photo (?)_
+
+Additional thanks to Nathan Morgan and Jonathan Zheng for their insightful conversations and code contributions.
 
 # Supplementary Material
 
