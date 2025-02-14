@@ -295,7 +295,7 @@ We can run inference against all of the anchors using this 'vector product':
 
 $$
 \mathbf{y^a} \mathbf{y}^T = \begin{bmatrix} y^a_1 \\ y^a_2 \\ \vdots \\ y^a_n \end{bmatrix} 
-\begin{bmatrix} y_1 & y_2 & \cdots & y_m \end{bmatrix} =
+\begin{bmatrix} y_1 & y_2 & \cdots & y_m \end{bmatrix} \rightarrow
 \begin{bmatrix} 
     y^a_1 - y_1 & y^a_1 - y_2 & \cdots & y^a_1 - y_m \\
     y^a_2 - y_1 & y^a_2 - y_2 & \cdots & y^a_2 - y_m \\
@@ -309,8 +309,8 @@ $$
 But you can also augmented in the _other_ direction _if_ you have enforced pairwise loop consistency during training, i.e.
 
 $$
-\mathbf{y^a}^T \mathbf{y} = \begin{bmatrix} y^a_1 & y^a_2 & \vdots & y^a_n \end{bmatrix} 
-\begin{bmatrix} y_1 \\ y_2 \\ \cdots \\ y_m \end{bmatrix} =
+\mathbf{y^a}^T \mathbf{y} = \begin{bmatrix} y^a_1 & y^a_2 & \cdots & y^a_n \end{bmatrix} 
+\begin{bmatrix} y_1 \\ y_2 \\ \vdots \\ y_m \end{bmatrix} \rightarrow
 \begin{bmatrix} 
     y_1 - y^a_1 & y_1 - y^a_2 & \cdots & y_1 - y^a_m \\
     y_2 - y^a_1 & y_2 - y^a_2 & \cdots & y_2 - y^a_m \\
@@ -509,12 +509,14 @@ Additional thanks to Nathan Morgan and Jonathan Zheng for their insightful conve
 ## Miscellaneous Thoughts
 
 There are some applications where predicting property _differences_ is actually the typical application:
+
  - `confrank`: github.com/grimme-lab/confrank
  - all of the Relative Binding Free Energy (RBFE) research space
     - easier to predict difference in BFE than absolute
     - many tools exist to plan 'routes' of low-error difference calculations
 
 Some ML theorists suggest one can enforce pairwise learning without actually changing the target:
+
  - `AdaPRL` train a normal NN but penalize pairwise distances in loss function (https://arxiv.org/abs/2501.05809)
 
 ## Cited Works
