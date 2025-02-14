@@ -500,15 +500,14 @@ I would especially like to know of any existing __frameworks__ for doing this so
 
 ## Miscellaneous Thoughts
 
-<!-- there are some existing applications that are interesting too...
-confrank: https://github.com/grimme-lab/confrank
- -->
+There are some applications where predicting property _differences_ is actually the typical application:
+ - `confrank`: github.com/grimme-lab/confrank
+ - all of the Relative Binding Free Energy (RBFE) research space
+    - easier to predict difference in BFE than absolute
+    - many tools exist to plan 'routes' of low-error difference calculations
 
-<!-- can possibly take some lessons from RBFE world -->
-
-<!-- more theory questions as well
-AdaPRL: train a normal NN but penalize pairwise distances in loss function (https://arxiv.org/abs/2501.05809)
- -->
+Some ML theorists suggest one can enforce pairwise learning without actually changing the target:
+ - `AdaPRL` train a normal NN but penalize pairwise distances in loss function (https://arxiv.org/abs/2501.05809)
 
 ## Cited Works
 
