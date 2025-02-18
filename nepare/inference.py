@@ -10,7 +10,7 @@ from nepare.nn import NeuralPairwiseRegressor
 from nepare.data import PairwiseInferenceDataset
 
 
-def predict(npr: NeuralPairwiseRegressor, pid: torch.utils.data.DataLoader, *, how: Literal['all'] = 'all') -> torch.Tensor:
+def predict(npr: NeuralPairwiseRegressor, pid: torch.utils.data.DataLoader, *, how: Literal['all', 'half'] = 'all') -> torch.Tensor:
     """Run inference with a Neural Pairwise Regressor, recasting results back to absolute.
 
     Args:
@@ -20,7 +20,7 @@ def predict(npr: NeuralPairwiseRegressor, pid: torch.utils.data.DataLoader, *, h
     trainer = lightning.Trainer(logger=False)  # TODO: ensure that we only ever run inference on 1 GPU (or none)
     pred = torch.vstack(trainer.predict(npr, pid))
     match how:
-        case 'all':
+        case 'all' | 'half':
             return _all_anchor(pred, pid)
         case _:
             raise TypeError(f"Unsupported inference method {how=}")

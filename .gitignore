@@ -1,6 +1,8 @@
 # meta
 meta/*/tex2pdf*
 notebooks/lightning_logs
+notebooks/polaris_asap/lightning_logs
+notebooks/submitted_models_ckpts
 
 .vscode
 
