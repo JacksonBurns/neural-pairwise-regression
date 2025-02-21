@@ -10,14 +10,14 @@ from nepare.nn import NeuralPairwiseRegressor
 from nepare.data import PairwiseInferenceDataset
 
 
-def predict(npr: NeuralPairwiseRegressor, pid: torch.utils.data.DataLoader, *, how: Literal['all', 'half'] = 'all') -> torch.Tensor:
+def predict(npr: NeuralPairwiseRegressor, pid: torch.utils.data.DataLoader, *, how: Literal['all', 'half'] = 'all', quiet: bool=False) -> torch.Tensor:
     """Run inference with a Neural Pairwise Regressor, recasting results back to absolute.
 
     Args:
         npr (NeuralPairwiseRegressor): Trained model
         pid (torch.utils.data.DataLoader): Dataloader of a PairwiseInferenceDataset
     """
-    trainer = lightning.Trainer(logger=False)  # TODO: ensure that we only ever run inference on 1 GPU (or none)
+    trainer = lightning.Trainer(logger=False, enable_progress_bar=not quiet)  # TODO: ensure that we only ever run inference on 1 GPU (or none)
     pred = torch.vstack(trainer.predict(npr, pid))
     match how:
         case 'all' | 'half':

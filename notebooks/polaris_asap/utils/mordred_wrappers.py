@@ -7,7 +7,7 @@ from fastprop.data import standard_scale
 
 def smi2features(smis, feature_means=None, feature_vars=None):
     calc = Calculator(descriptors, ignore_3D=True)
-    train_features = calc.pandas(map(MolFromSmiles, smis), nmols=len(smis)).fill_missing()
+    train_features = calc.pandas(map(MolFromSmiles, smis), nmols=len(smis), quiet=True).fill_missing()
     X = torch.tensor(train_features.to_numpy(dtype=np.float32), dtype=torch.float32)
     if feature_means is None or feature_vars is None:
         X, feature_means, feature_vars = standard_scale(X)
