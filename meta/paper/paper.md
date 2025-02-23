@@ -18,6 +18,7 @@ This short paper aims to do a few things:
  - formalize my (limited) literature review
  - describe my initial efforts into this approach (especially related to `polaris`)
  - briefly mention some of ideas for future directions
+ - encourage others to try this framework (especially for the `polaris` competition!)
 
 Much of this paper has been adapted from the corresponding presentation in `meta/presentation` - consider scrolling through those slides first to get an idea of what Neural Pairwise Regression is.
 
@@ -81,7 +82,7 @@ Each notebook contains extensive inline commentary about the finer points of imp
 
  - the results of `polaris_adme` and `polaris_chemprop_nepare` are ranked _quite_ high on [the RPPB leaderboard](https://polarishub.io/benchmarks/polaris/adme-fang-rppb-1), only narrowly losing out to a massive foundation model
  - the `polaris_asap` notebook shows everything that is needed to reproduce my submission for the ASAP Discovery x OpenADMET Competition's [antiviral-potency](https://polarishub.io/competitions/asap-discovery/antiviral-potency-2025) and [antiviral-admet](https://polarishub.io/competitions/asap-discovery/antiviral-admet-2025) tasks.
- The exact commits showing the run notebook are [here]() for the former and [here](https://github.com/JacksonBurns/neural-pairwise-regression/blob/1a0f3b6b472b3831ab296352925dd77e9aad8d5e/notebooks/polaris_asap/main.ipynb) for the latter.
+ The exact commits showing the run notebook are [here](https://github.com/JacksonBurns/neural-pairwise-regression/blob/7e25d7a1a4851bc75509f8aa811b90ecda371669/notebooks/polaris_asap/main.ipynb) for the former and [here](https://github.com/JacksonBurns/neural-pairwise-regression/blob/1a0f3b6b472b3831ab296352925dd77e9aad8d5e/notebooks/polaris_asap/main.ipynb) for the latter.
 
 # Future Directions
 
