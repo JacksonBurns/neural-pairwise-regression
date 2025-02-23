@@ -295,7 +295,7 @@ We can run inference against all of the anchors using this 'vector product':
 
 $$
 \mathbf{y^a} \mathbf{y}^T = \begin{bmatrix} y^a_1 \\ y^a_2 \\ \vdots \\ y^a_n \end{bmatrix} 
-\begin{bmatrix} y_1 & y_2 & \cdots & y_m \end{bmatrix} =
+\begin{bmatrix} y_1 & y_2 & \cdots & y_m \end{bmatrix} \rightarrow
 \begin{bmatrix} 
     y^a_1 - y_1 & y^a_1 - y_2 & \cdots & y^a_1 - y_m \\
     y^a_2 - y_1 & y^a_2 - y_2 & \cdots & y^a_2 - y_m \\
@@ -309,8 +309,8 @@ $$
 But you can also augmented in the _other_ direction _if_ you have enforced pairwise loop consistency during training, i.e.
 
 $$
-\mathbf{y^a}^T \mathbf{y} = \begin{bmatrix} y^a_1 & y^a_2 & \vdots & y^a_n \end{bmatrix} 
-\begin{bmatrix} y_1 \\ y_2 \\ \cdots \\ y_m \end{bmatrix} =
+\mathbf{y^a}^T \mathbf{y} = \begin{bmatrix} y^a_1 & y^a_2 & \cdots & y^a_n \end{bmatrix} 
+\begin{bmatrix} y_1 \\ y_2 \\ \vdots \\ y_m \end{bmatrix} \rightarrow
 \begin{bmatrix} 
     y_1 - y^a_1 & y_1 - y^a_2 & \cdots & y_1 - y^a_m \\
     y_2 - y^a_1 & y_2 - y^a_2 & \cdots & y_2 - y^a_m \\
@@ -385,15 +385,13 @@ predict_dataset = PairwiseInferenceDataset(
 
 _demo notebook_
 
-## Aqueous Solubility Prediction
+## Real Molecular Properties
 
-Here we use `mordred(-community)` as the encoder.
+Small molecule Rat Plasma Protein Binding via `polaris`
 
-<!-- | Customer / Source | Arnhem [euro/ton] |  Gouda [euro/ton] | Demand [tons] |
-| :---: | :--: | :--: | :--: |
-| London | n/a | 2.5 | 125 |
-| The Hague | 1.4 | 0.8 | 200 |
-| **Supply [tons]** | 550 tons | 700 tons | n/a | -->
+ - only 110 training samples but high-quality
+
+![`nepare` reaches #3 on the leaderboard, narrowly losing to a _billion_ parameter foundation model.](./figures/polaris_rppb_nepare_leaderboard.png){width=3.5in}
 
 # Subsequent Steps
 
@@ -496,19 +494,30 @@ We have some previous work in this group that I am aware of.
 
 I would especially like to know of any existing __frameworks__ for doing this so I can avoid re-implementing a bunch of metrics/methods/etc. from scratch.
 
+# Acknowledgements
+
+## Thank you!
+
+Thanks to all members of the Green Group!
+
+_latest group photo (?)_
+
+Additional thanks to Nathan Morgan and Jonathan Zheng for their insightful conversations and code contributions.
+
 # Supplementary Material
 
 ## Miscellaneous Thoughts
 
-<!-- there are some existing applications that are interesting too...
-confrank: https://github.com/grimme-lab/confrank
- -->
+There are some applications where predicting property _differences_ is actually the typical application:
 
-<!-- can possibly take some lessons from RBFE world -->
+ - `confrank`: github.com/grimme-lab/confrank
+ - all of the Relative Binding Free Energy (RBFE) research space
+    - easier to predict difference in BFE than absolute
+    - many tools exist to plan 'routes' of low-error difference calculations
 
-<!-- more theory questions as well
-AdaPRL: train a normal NN but penalize pairwise distances in loss function (https://arxiv.org/abs/2501.05809)
- -->
+Some ML theorists suggest one can enforce pairwise learning without actually changing the target:
+
+ - `AdaPRL` train a normal NN but penalize pairwise distances in loss function (https://arxiv.org/abs/2501.05809)
 
 ## Cited Works
 
