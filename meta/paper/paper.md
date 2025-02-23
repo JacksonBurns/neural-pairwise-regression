@@ -1,7 +1,8 @@
 ---
-title: "Neural Pairwise Regression"
+title: "Pairwise Augmentation for Molecular Property Prediction"
+subtitle: "Mini-Review and Initial Exploration"
 author: Jackson Burns
-date: 7 February 2025
+date: 22 February 2025
 geometry: margin=1in
 bibliography: paper.bib
 citation-style: journal-of-cheminformatics
@@ -10,6 +11,22 @@ note: |
    pandoc --citeproc -s paper.md -o paper.pdf
  from the paper directory.
 ---
+
+This short paper aims to do a few things:
+ - formalize my (limited) literature review
+ - describe my initial efforts into this approach (especially related to `polaris`)
+ - briefly mention some of ideas for future directions
+
+In just a few sentences, I'll say that Pairwise Augmentation is an emerging regression technique with significant potential for small-dataset machine learning (i.e. nearly _all_ of chemistry).
+ML theorists are developing guidelines for using it while practitioners in the chemistry space are gathering empirical evidence of its efficacy.
+My contribution is to explore the use of neural networks in this context and provide a high-quality Python library in doing so.
+I've also run some initial benchmarks using the `polaris` library, and the results are promising.
+
+# Background
+
+# Initial Investigation
+
+
 
 ## Background
 At the most basic level, we want to find some computational model that predicts some target value $y$ based on an input vector $x$ of features (e.g. the value of a house and its square footage and build year, respectively).

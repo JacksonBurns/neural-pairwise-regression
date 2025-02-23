@@ -5,6 +5,7 @@ from rdkit.Chem import MolFromSmiles
 from fastprop.data import standard_scale
 
 
+# convenience function to map list[SMILES] -> imputed, scaled, winsorized features tensor
 def smi2features(smis, feature_means=None, feature_vars=None):
     calc = Calculator(descriptors, ignore_3D=True)
     train_features = calc.pandas(map(MolFromSmiles, smis), nmols=len(smis), quiet=True).fill_missing()
