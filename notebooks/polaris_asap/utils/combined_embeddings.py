@@ -1,4 +1,4 @@
-from typing import Iterable
+from typing import Iterable, OrderedDict
 
 import torch
 import numpy as np
@@ -27,3 +27,29 @@ class MordredChemPropEmbedder(ChemPropEmbedder):
         bmg, feats = batch
         Z = super().forward(bmg)
         return torch.cat((Z, feats), dim=1)
+
+class ArbitrarilyMoreComplicatedEmbedder(torch.nn.Module):
+    def __init__(self, mp, agg, mordred_size, mordred_layers):
+        super().__init__()
+        # chemprop
+        self.mp = mp
+        self.agg = agg
+
+        # mordred
+        _modules = OrderedDict()
+        _modules["dropout"] = torch.nn.Dropout(p=mordred_size / 1_613)
+        activation = torch.nn.ReLU
+        for i in range(mordred_layers):
+            _modules[f"hidden_{i}"] = torch.nn.Linear(1_613 if i == 0 else mordred_size, mordred_size)
+            _modules[f"{activation.__name__.lower()}_{i}"] = activation()
+        self.fnn = torch.nn.Sequential(_modules)
+
+        # shared
+        self.bn = torch.nn.BatchNorm1d(mp.output_dim + mordred_size)
+
+    def forward(self, batch):
+        bmg, feats = batch
+        H = self.mp(bmg)
+        Z = self.agg(H, bmg.batch)
+        f = self.fnn(feats)
+        return self.bn(torch.cat((Z, f), dim=1))

@@ -34,8 +34,11 @@ def split(train_smis, test_smis):
 
     # mutate our sets
     rng = Random(42)
-    val_idxs_swap = rng.sample(val_idxs, int(len(val_idxs) * 0.5))
-    train_idxs_swap = rng.sample(train_idxs, int(len(val_idxs) * 0.5))
-    train_idxs = [i for i in train_idxs if i not in train_idxs_swap] + val_idxs_swap
-    val_idxs = [i for i in val_idxs if i not in val_idxs_swap] + train_idxs_swap
+    # switch some out
+    # val_idxs_swap = rng.sample(val_idxs, int(len(val_idxs) * 0.5))
+    # train_idxs_swap = rng.sample(train_idxs, int(len(val_idxs) * 0.5))
+    # train_idxs = [i for i in train_idxs if i not in train_idxs_swap] + val_idxs_swap
+    # val_idxs = [i for i in val_idxs if i not in val_idxs_swap] + train_idxs_swap
+    # just shuffle order
+    rng.shuffle(val_idxs)
     return train_idxs, val_idxs

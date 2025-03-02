@@ -25,7 +25,7 @@ class ChemPropEmbedder(torch.nn.Module):
     def forward(self, bmg):
         H = self.mp(bmg)
         Z = self.agg(H, bmg.batch)
-        return Z
+        return self.bn(Z)
 
 
 # convenience function to map list[SMILES] -> list[chemprop MolGraphs]
