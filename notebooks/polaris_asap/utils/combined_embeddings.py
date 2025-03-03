@@ -37,11 +37,13 @@ class ArbitrarilyMoreComplicatedEmbedder(torch.nn.Module):
 
         # mordred
         _modules = OrderedDict()
-        _modules["dropout"] = torch.nn.Dropout(p=mordred_size / 1_613)
+        _modules["dropout_0"] = torch.nn.Dropout(p=0.80)
         activation = torch.nn.ReLU
         for i in range(mordred_layers):
             _modules[f"hidden_{i}"] = torch.nn.Linear(1_613 if i == 0 else mordred_size, mordred_size)
-            _modules[f"{activation.__name__.lower()}_{i}"] = activation()
+            if i < (mordred_layers - 1):  # skip on last
+                _modules[f"{activation.__name__.lower()}_{i}"] = activation()
+                _modules[f"dropout_{i+1}"] = torch.nn.Dropout(p=0.50)
         self.fnn = torch.nn.Sequential(_modules)
 
         # shared
