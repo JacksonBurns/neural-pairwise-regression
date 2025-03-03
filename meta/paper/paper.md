@@ -82,7 +82,7 @@ Each notebook contains extensive inline commentary about the finer points of imp
 
  - the results of `polaris_adme` and `polaris_chemprop_nepare` are ranked _quite_ high on [the RPPB leaderboard](https://polarishub.io/benchmarks/polaris/adme-fang-rppb-1), only narrowly losing out to a massive foundation model
  - the `polaris_asap` notebook shows everything that is needed to reproduce my submission for the ASAP Discovery x OpenADMET Competition's [antiviral-potency](https://polarishub.io/competitions/asap-discovery/antiviral-potency-2025) and [antiviral-admet](https://polarishub.io/competitions/asap-discovery/antiviral-admet-2025) tasks.
- The exact commits showing the run notebook are [here](https://github.com/JacksonBurns/neural-pairwise-regression/blob/7e25d7a1a4851bc75509f8aa811b90ecda371669/notebooks/polaris_asap/main.ipynb) for the former and [here](https://github.com/JacksonBurns/neural-pairwise-regression/blob/1a0f3b6b472b3831ab296352925dd77e9aad8d5e/notebooks/polaris_asap/main.ipynb) for the latter.
+ The exact commits showing the run notebook are [here](https://github.com/JacksonBurns/neural-pairwise-regression/blob/7987cf55d1e1672ac23e9c170360c22af68673ba/notebooks/polaris_asap.ipynb) for the former and [here]() for the latter.
 
 # Future Directions
 
