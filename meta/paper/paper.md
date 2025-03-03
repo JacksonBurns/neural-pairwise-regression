@@ -2,7 +2,7 @@
 title: "Pairwise Augmentation for Molecular Property Prediction"
 subtitle: "Mini-Review and Initial Exploration"
 author: Jackson Burns
-date: 22 February 2025
+date: 3 March 2025
 geometry: margin=1in
 bibliography: paper.bib
 citation-style: journal-of-cheminformatics
@@ -78,11 +78,11 @@ There are a number of demonstrations in the repository (see [`notebooks`](../../
  - `polaris_chemprop_nepare`: ADME properties using a learned molecular representation with ChemProp
  - `polaris_asap`: the ASAP discovery challenge with polaris
 
-Each notebook contains extensive inline commentary about the finer points of implementing pairwise regression, but I'll highlight just a few things:
+Each notebook contains extensive inline commentary about the finer points of implementing pairwise regression, but I'll highlight just two things:
 
  - the results of `polaris_adme` and `polaris_chemprop_nepare` are ranked _quite_ high on [the RPPB leaderboard](https://polarishub.io/benchmarks/polaris/adme-fang-rppb-1), only narrowly losing out to a massive foundation model
  - the `polaris_asap` notebook shows everything that is needed to reproduce my submission for the ASAP Discovery x OpenADMET Competition's [antiviral-potency](https://polarishub.io/competitions/asap-discovery/antiviral-potency-2025) and [antiviral-admet](https://polarishub.io/competitions/asap-discovery/antiviral-admet-2025) tasks.
- The exact commits showing the run notebook are [here](https://github.com/JacksonBurns/neural-pairwise-regression/blob/7987cf55d1e1672ac23e9c170360c22af68673ba/notebooks/polaris_asap.ipynb) for the former and [here]() for the latter.
+ The exact commits showing the run notebook are [here](https://github.com/JacksonBurns/neural-pairwise-regression/blob/7987cf55d1e1672ac23e9c170360c22af68673ba/notebooks/polaris_asap.ipynb) for the former and [here](https://github.com/JacksonBurns/neural-pairwise-regression/blob/c095414518aa5fa45ec3a36ef1b8e8e231c0a598/notebooks/polaris_asap.ipynb) for the latter.
 
 # Future Directions
 
